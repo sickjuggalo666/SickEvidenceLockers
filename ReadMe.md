@@ -8,7 +8,6 @@ use MF_Inventory before but have made the move to OX_Inventory!
 ~ ESX Legacy 1.9.2+
 
 **MENU OPTIONS**
-
 ~ Chief can access any inventory that has been created so long as they 
 know they name or case number for the locker/evidence storage! 
 ~ Lower rank officers can use this to store personal goods on them
