@@ -27,4 +27,10 @@ based chief menus!
 ~ Webhooks for Creating and Deleting Inventories!
 
 
-Not much is 
+**SUPPORT**
+If you need help with anything or have ideas for this or other scripts 
+please join the Discord with the link below! Discord also has other 
+scripts I have made and will be adding more as we go on! Thank you all 
+again!
+
+**LINK:** https://discord.gg/YCsBGB58eg
