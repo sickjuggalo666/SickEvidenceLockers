@@ -43,26 +43,43 @@ end)
 
 Citizen.CreateThread(function()
 	for k,v in pairs(Config.location) do
-		exports.ox_target:addBoxZone({
-			coords = vector3(v.coords.x,v.coords.y,v.coords.z+1.5),
-			size = vec3(3, 2, 3),
-			rotation = 90,
-			debug = false,
-			options = {
-				{
-					name = 'evidence_Lockers',
-					icon = 'fa-solid fa-cube',
-					groups = 'police',
-					label = 'Open Evidence Locker',
-					canInteract = function(entity, distance, coords, name)
-						return true
-					end,
-					onSelect = function()
-						openInventory()
-					end
+		if Config.Target == 'ox_target' then
+			exports.Config.Target:addBoxZone({
+				coords = vector3(v.coords.x,v.coords.y,v.coords.z+1.5),
+				size = vec3(3, 2, 3),
+				rotation = 90,
+				debug = false,
+				options = {
+					{
+						name = 'evidence_Lockers',
+						icon = 'fa-solid fa-cube',
+						groups = 'police',
+						event = 'SickEvdence:openInventory'
+						label = 'Open Evidence Locker',
+						canInteract = function(entity, distance, coords, name)
+							return true
+						end,
+					}
 				}
-			}
-		})
+			})
+		elseif Config.Target == 'qtarget' then
+			exports[Config.Target]:AddBoxZone('evidence_Lockers', vector3(v.coords.x,v.coords.y,v.coords.z+1.5), 5, 4, {
+                name='evidence_Lockers'
+                heading = 69.0,
+                debugPoly=false,
+				minZ = 1.58,
+				maxZ = 4.56
+            }, {
+                options = {
+                    {
+                    event = 'SickEvdence:openInventory',
+                    icon = 'fas fa-door-open',
+                    label = 'Open Evidence Locker',
+                    },
+                },
+                distance = 2.5
+            })  
+		end
 	end
 end)
 
@@ -110,7 +127,9 @@ lib.registerContext({
 	},
 })
 
-function openInventory()
+RegisterNetEvent('SickEvdence:openInventory')
+AddEventHandler('SickEvdence:openInventory',function()
+--function openInventory()
 	if Config.Rank[playerState.job.grade_name] then
 		lib.showContext('chiefmenu')
 	elseif Config.Jobs[playerState.job.name] then 
@@ -118,7 +137,7 @@ function openInventory()
 	else
 		Notiy("Wrong Job Dude!")
 	end
-end
+end)
 
 function confirmCreate(inventoryID)
 	lib.registerContext({
