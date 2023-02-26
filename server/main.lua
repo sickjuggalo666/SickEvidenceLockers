@@ -25,6 +25,15 @@ ESX.RegisterServerCallback('SickEvidence:getInventory', function(source, cb, inv
     end
 end)
 
+ESX.RegisterServerCallback('SickEvidence:getLocker', function(source, cb, lockerID)
+  local inv = exports.ox_inventory:GetInventory(lockerID, false)
+  if not inv then
+    cb(true)
+  else
+    cb(false)
+  end
+end)
+
 RegisterNetEvent('SickEvidence:createLocker')
 AddEventHandler('SickEvidence:createLocker', function(lockerID)
     local xPlayer = ESX.GetPlayerFromId(source)

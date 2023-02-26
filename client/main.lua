@@ -321,8 +321,8 @@ AddEventHandler('SickEvidence:lockerCallbackEvent', function(lockerID)
     ESX.TriggerServerCallback('SickEvidence:getPlayerName', function(data)
         if data ~= nil then
 			local lockerID = ("LEO:"..data.firstname.." "..data.lastname)
-			ESX.TriggerServerCallback('SickEvidence:getLocker', function(lockerID)
-				if lockerID then
+			ESX.TriggerServerCallback('SickEvidence:getLocker', function(locker)
+				if locker then
 					local lockerID = ("LEO:"..data.firstname.." "..data.lastname)
 					lockerCreate(lockerID)
 				else
