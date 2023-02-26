@@ -44,7 +44,7 @@ end)
 Citizen.CreateThread(function()
 	for k,v in pairs(Config.location) do
 		if Config.Target == 'ox_target' then
-			exports.Config.Target:addBoxZone({
+			exports[Config.Target]:addBoxZone({
 				coords = vector3(v.coords.x,v.coords.y,v.coords.z+1.5),
 				size = vec3(3, 2, 3),
 				rotation = 90,
@@ -54,8 +54,8 @@ Citizen.CreateThread(function()
 						name = 'evidence_Lockers',
 						icon = 'fa-solid fa-cube',
 						groups = 'police',
-						event = 'SickEvdence:openInventory'
-						label = 'Open Evidence Locker',
+						event = 'SickEvdence:openInventory',
+						label = 'Open Evidence Locker Ox_target',
 						canInteract = function(entity, distance, coords, name)
 							return true
 						end,
@@ -63,9 +63,9 @@ Citizen.CreateThread(function()
 				}
 			})
 		elseif Config.Target == 'qtarget' then
-			exports[Config.Target]:AddBoxZone('evidence_Lockers', vector3(v.coords.x,v.coords.y,v.coords.z+1.5), 5, 4, {
-                name='evidence_Lockers'
-                heading = 69.0,
+			exports[Config.Target]:AddBoxZone('evidence_Lockers', vector3(v.coords.x,v.coords.y,v.coords.z), 3, 2, {
+                name='evidence_Lockers',
+                heading = 178.5338,
                 debugPoly=false,
 				minZ = 1.58,
 				maxZ = 4.56
@@ -129,7 +129,6 @@ lib.registerContext({
 
 RegisterNetEvent('SickEvdence:openInventory')
 AddEventHandler('SickEvdence:openInventory',function()
---function openInventory()
 	if Config.Rank[playerState.job.grade_name] then
 		lib.showContext('chiefmenu')
 	elseif Config.Jobs[playerState.job.name] then 
