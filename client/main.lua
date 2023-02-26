@@ -111,7 +111,6 @@ lib.registerContext({
 })
 
 function openInventory()
-	refreshjob()
 	if Config.Rank[playerState.job.grade_name] then
 		lib.showContext('chiefmenu')
 	elseif Config.Jobs[playerState.job.name] then 
