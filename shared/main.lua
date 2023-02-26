@@ -1,5 +1,7 @@
 Config = {}
 
+Config.Target = 'qtarget' --ox or qtarget
+
 Config.UsePed = true  -- you can turn off ped but still use target!
 Config.Jobs = {
     ['police'] = true,
