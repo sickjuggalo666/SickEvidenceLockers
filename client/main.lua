@@ -54,7 +54,7 @@ Citizen.CreateThread(function()
 						name = 'evidence_Lockers',
 						icon = 'fa-solid fa-cube',
 						groups = 'police',
-						event = 'SickEvdence:openInventory',
+						event = 'SickEvidence:openInventory',
 						label = 'Open Evidence Locker',
 						canInteract = function(entity, distance, coords, name)
 							return true
@@ -72,7 +72,7 @@ Citizen.CreateThread(function()
             }, {
                 options = {
                     {
-                    event = 'SickEvdence:openInventory',
+                    event = 'SickEvidence:openInventory',
                     icon = 'fas fa-door-open',
                     label = 'Open Evidence Locker',
                     },
@@ -127,8 +127,8 @@ lib.registerContext({
 	},
 })
 
-RegisterNetEvent('SickEvdence:openInventory')
-AddEventHandler('SickEvdence:openInventory',function()
+RegisterNetEvent('SickEvidence:openInventory')
+AddEventHandler('SickEvidence:openInventory',function()
 	if Config.Rank[playerState.job.grade_name] then
 		lib.showContext('chiefmenu')
 	elseif Config.Jobs[playerState.job.name] then 
