@@ -55,7 +55,7 @@ Citizen.CreateThread(function()
 						icon = 'fa-solid fa-cube',
 						groups = 'police',
 						event = 'SickEvdence:openInventory',
-						label = 'Open Evidence Locker Ox_target',
+						label = 'Open Evidence Locker',
 						canInteract = function(entity, distance, coords, name)
 							return true
 						end,
