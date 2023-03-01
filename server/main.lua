@@ -1,29 +1,77 @@
 ESX = exports['es_extended']:getSharedObject()
 local ox_inventory = exports.ox_inventory
 
-Discord_url = ""  --Server side for security!
+Discord_url = ""
 
 RegisterNetEvent('SickEvidence:createInventory')
-AddEventHandler('SickEvidence:createInventory', function(inventoryID)
+AddEventHandler('SickEvidence:createInventory', function(evidenceID)
   local xPlayer = ESX.GetPlayerFromId(source)
   local name = xPlayer.getName()
-  local id = inventoryID
-  local label = inventoryID  
+  local id = evidenceID
+  local label = evidenceID  
   local slots = 25 
   local maxWeight = 5000 
   
   ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
-  sendCreateDiscord(source, name, "Created Evidence", inventoryID)
+  sendCreateDiscord(source, name, "Created Evidence", evidenceID)
 end)
 
-ESX.RegisterServerCallback('SickEvidence:getInventory', function(source, cb, inventoryID)
-    local inv = exports.ox_inventory:GetInventory(inventoryID, false)
+ESX.RegisterServerCallback('SickEvidence:getInventory', function(source, cb, evidenceID)
+    local inv = exports.ox_inventory:GetInventory(evidenceID, false)
     if inv then
       cb(true)
     else
       cb(false)
     end
 end)
+
+RegisterNetEvent('SickEvidence:deleteEvidence')
+AddEventHandler('SickEvidence:deleteEvidence', function(evidenceID)
+  --[[local xPlayer = ESX.GetPlayerFromId(source)
+  local name = xPlayer.getName()
+  MySQL.update('DELETE FROM `ox_inventory` WHERE identifier = ? ', {evidenceID}, function(affectedRows)
+      if affectedRows then
+          print(affectedRows)
+      end
+  end)
+  sendDeleteDiscord(source, name, "Deleted Evidence",evidenceID)]]
+end)
+
+RegisterNetEvent('SickEvidence:createLocker')
+AddEventHandler('SickEvidence:createLocker', function(lockerID)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local name = xPlayer.getName()
+    local id = lockerID
+    local label = lockerID  
+    local slots = 25 
+    local maxWeight = 5000 
+    
+    ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+    sendCreateDiscord(source, name, "Created Locker",label)
+end)
+
+ESX.RegisterServerCallback('SickEvidence:getOtherInventories', function(source, cb, Otherlocker)
+    local inv = exports.ox_inventory:GetInventory(Otherlocker, false)
+    if inv then
+      cb(true)
+    else
+      cb(false)
+    end
+end)
+
+RegisterNetEvent('SickEvidence:createOtherLocker')
+AddEventHandler('SickEvidence:createOtherLocker', function(OtherlockerID)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local name = xPlayer.getName()
+    local id = OtherlockerID  
+    local label = OtherlockerID  
+    local slots = 25 
+    local maxWeight = 5000 
+    
+    ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+    sendCreateDiscord(source, name, "Created Job Locker",label)
+end)
+
 
 ESX.RegisterServerCallback('SickEvidence:getLocker', function(source, cb, lockerID)
   local inv = exports.ox_inventory:GetInventory(lockerID, false)
@@ -34,26 +82,9 @@ ESX.RegisterServerCallback('SickEvidence:getLocker', function(source, cb, locker
   end
 end)
 
-RegisterNetEvent('SickEvidence:createLocker')
-AddEventHandler('SickEvidence:createLocker', function(lockerID)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local name = xPlayer.getName()
-    local id = lockerID
-    local label = "Case :#" ..lockerID  
-    local slots = 25 
-    local weight = 5000 
-    
-    ox_inventory:RegisterStash(id, label, slots, weight,nil)
-    sendCreateDiscord(source, name, "Created Locker",lockerID)
-end)
-
-ESX.RegisterServerCallback('SickEvidence:getInventory', function(source, cb, lockerID)
-    local inv = exports.ox_inventory:GetInventory(lockerID, false)
-    if inv then
-      cb(true)
-    else
-      cb(false)
-    end
+RegisterNetEvent('SickEvidence:deleteLocker')
+AddEventHandler('SickEvidence:deleteLocker', function(lockerID)
+  print(string.format("deleting locker for identifier '%s'",lockerID))
 end)
 
 sendDeleteDiscord = function(color, name, message, footer)
