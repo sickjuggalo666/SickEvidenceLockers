@@ -317,14 +317,19 @@ AddEventHandler('SickEvidence:lockerCallbackEvent', function()
 								description = 'Create a Personal Locker?',
 								arrow = true,
 								event = 'SickEvidence:confirmLocker',
-								args = {selection = 'confirm', inventory = lockerID}
+								args = {
+									selection = 'confirm', 
+									inventory = lockerID
+								}
 							},
 							{
 								title = 'Cancel Creation?',
 								description = 'Cancel The Creation of this Personal Locker?',
 								arrow = true,
 								event = 'SickEvidence:confirmLocker',
-								args = {selection = 'cancel'}
+								args = {
+									selection = 'cancel'
+								}
 							}
 						},
 					})
@@ -570,40 +575,6 @@ AddEventHandler('SickEvidence:ChieflockerOptions', function(args)
 	end
 end)
 
-function Notiy(noty_type, message)
-    if noty_type and message then
-        if Config.NotificationType.client == 'esx' then
-            ESX.ShowNotification(message)
-
-        elseif Config.NotificationType.client == 'okokNotify' then
-            if noty_type == 1 then
-                exports['okokNotify']:Alert("Dongle", message, 10000, 'success')
-            elseif noty_type == 2 then
-                exports['okokNotify']:Alert("Dongle", message, 10000, 'info')
-            elseif noty_type == 3 then
-                exports['okokNotify']:Alert("Dongle", message, 10000, 'error')
-            end
-
-        elseif Config.NotificationType.client == 'mythic' then
-            if noty_type == 1 then
-                exports['mythic_notify']:SendAlert('success', message, { ['background-color'] = '#ffffff', ['color'] = '#000000' })
-            elseif noty_type == 2 then
-                exports['mythic_notify']:SendAlert('inform', message, { ['background-color'] = '#ffffff', ['color'] = '#000000' })
-            elseif noty_type == 3 then
-                exports['mythic_notify']:SendAlert('error', message, { ['background-color'] = '#ffffff', ['color'] = '#000000' })
-            end
-
-        elseif Config.NotificationType.client == 'chat' then
-            TriggerEvent('chatMessage', message)
-            
-        elseif Config.NotificationType.client == 'other' then
-            --add your own notification.
-            
-        end
-    end
-end
-
-
 ----NEW JOBS---
 
 lib.registerContext({
@@ -718,3 +689,37 @@ AddEventHandler('SickEvidence:confirmorcancelOthers', function(args)
 	    ox_inventory:openInventory('Stash', OtherlockerID)
 	end
 end)
+
+
+function Notiy(noty_type, message)
+    if noty_type and message then
+        if Config.NotificationType.client == 'esx' then
+            ESX.ShowNotification(message)
+
+        elseif Config.NotificationType.client == 'okokNotify' then
+            if noty_type == 1 then
+                exports['okokNotify']:Alert("Dongle", message, 10000, 'success')
+            elseif noty_type == 2 then
+                exports['okokNotify']:Alert("Dongle", message, 10000, 'info')
+            elseif noty_type == 3 then
+                exports['okokNotify']:Alert("Dongle", message, 10000, 'error')
+            end
+
+        elseif Config.NotificationType.client == 'mythic' then
+            if noty_type == 1 then
+                exports['mythic_notify']:SendAlert('success', message, { ['background-color'] = '#ffffff', ['color'] = '#000000' })
+            elseif noty_type == 2 then
+                exports['mythic_notify']:SendAlert('inform', message, { ['background-color'] = '#ffffff', ['color'] = '#000000' })
+            elseif noty_type == 3 then
+                exports['mythic_notify']:SendAlert('error', message, { ['background-color'] = '#ffffff', ['color'] = '#000000' })
+            end
+
+        elseif Config.NotificationType.client == 'chat' then
+            TriggerEvent('chatMessage', message)
+            
+        elseif Config.NotificationType.client == 'other' then
+            --add your own notification.
+            
+        end
+    end
+end
