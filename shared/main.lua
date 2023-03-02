@@ -19,9 +19,11 @@ Config.location = {
         UsePed = true,
         coords = vector3(300.2429, -580.0558, 42.2609), 
         h = 72.4052, 
-        job = 'ambulance',
+        size = vec3(3, 2, 3), -- size of the box zone
+        rotation = 90, -- Rotation of box zone
         AllowedRank = 3, 
         cop = false,
+        job = 'ambulance',
         TargetLabel = 'Open Ambulance Lockers',
         ped = 'S_M_M_Doctor_01'
     }
