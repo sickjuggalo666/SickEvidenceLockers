@@ -61,7 +61,7 @@ Citizen.CreateThread(function()
                     label = v.TargetLabel,
                     },
                 },
-				job = {v.job},
+				--job = {v.job},//idk what this should be but yea lol
                 distance = 2.5
             })  
 		end
