@@ -1,7 +1,7 @@
 ESX = nil
 local ox_inventory = exports.ox_inventory
 
-Discord_url = "https://discord.com/api/webhooks/1079278894122803211/aQ0E3zuSTDKU-84hsY4KX16Oy7AeJ3uJDXgn0RM7FIrxLNSQUuIe-foff5Cr2CZyS0LM"
+Discord_url = ""
 
 pcall(function() ESX = exports['es_extended']:getSharedObject() end)
 if ESX == nil then
