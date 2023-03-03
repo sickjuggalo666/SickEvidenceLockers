@@ -1,7 +1,12 @@
-ESX = exports['es_extended']:getSharedObject()
+ESX = nil
 local ox_inventory = exports.ox_inventory
 
-Discord_url = ""
+Discord_url = "https://discord.com/api/webhooks/1079278894122803211/aQ0E3zuSTDKU-84hsY4KX16Oy7AeJ3uJDXgn0RM7FIrxLNSQUuIe-foff5Cr2CZyS0LM"
+
+pcall(function() ESX = exports['es_extended']:getSharedObject() end)
+if ESX == nil then
+    TriggerEvent(Config.ESXObject, function(obj) ESX = obj end)
+end
 
 RegisterNetEvent('SickEvidence:createInventory')
 AddEventHandler('SickEvidence:createInventory', function(evidenceID)
@@ -140,4 +145,23 @@ ESX.RegisterServerCallback('SickEvidence:getPlayerName', function(source,cb)
         cb(nil)
       end
   end)
+end)
+
+AddEventHandler('txAdmin:events:scheduledRestart', function(eventData)
+  if eventData.secondsRemaining == 60 then
+      CreateThread(function()
+          Wait(45000)
+          --print("15 seconds before restart... saving all players!")
+          ESX.SavePlayers(function()
+              ExecuteCommand('saveinv')
+          end)
+      end)
+  end
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+  if (GetCurrentResourceName() ~= resourceName) then
+      ExecuteCommand('saveinv')
+  end
+  --print('The resource ' .. resourceName .. ' was stopped.')
 end)

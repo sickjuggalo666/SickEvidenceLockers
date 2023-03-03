@@ -1,5 +1,7 @@
 Config = {}
 
+Config.ESXObject = 'esx:getSharedObject' -- this is only for events gets ignored if using export
+
 Config.Target = 'ox_target'
 
 Config.location = {
@@ -9,9 +11,9 @@ Config.location = {
         h = 162.1413, 
         size = vec3(3, 2, 3), -- size of the box zone
         rotation = 90, -- Rotation of box zone
+        AllowedRank = 3, -- allowed ranks for Chief Options
         cop = true,  -- is this a police job? allows evidence lockers
         job = 'police', -- what job do you want here?
-        AllowedRank = 3, -- allowed ranks for Chief Options
         TargetLabel = 'Open Evidence', -- easier to label for each job
         ped = 's_m_m_armoured_01' -- ped is now location/job based
     },
@@ -19,17 +21,15 @@ Config.location = {
         UsePed = true,
         coords = vector3(300.2429, -580.0558, 42.2609), 
         h = 72.4052, 
-        size = vec3(3, 2, 3), -- size of the box zone
-        rotation = 90, -- Rotation of box zone
-        cop = false,
         job = 'ambulance',
-        AllowedRank = 3,
+        AllowedRank = 3, 
+        cop = false,
         TargetLabel = 'Open Ambulance Lockers',
         ped = 'S_M_M_Doctor_01'
     }
 }
 
-Config.NotificationType = { -- i forgot this on initial drop!SS
+Config.NotificationType = { -- i forgot this on initial drop!
     client = 'okokNotify',
     server = 'okokNotify'
 }

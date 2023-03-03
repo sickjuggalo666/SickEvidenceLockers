@@ -1,14 +1,40 @@
-ESX = exports['es_extended']:getSharedObject()
+ESX = nil
 local ox_inventory = exports.ox_inventory
 local pedspawned = false
-local playerState = LocalPlayer.state
+local PlayerData = {}
 local evidenceNpc = nil
+
+Citizen.CreateThread(function()
+	while ESX == nil do
+		pcall(function() ESX = exports['es_extended']:getSharedObject() end)
+		if ESX == nil then
+			TriggerEvent(Config.ESXObject, function(obj) ESX = obj end)
+		end
+		Wait(100)
+	end
+end)
+
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(xPlayer)
+	PlayerData = xPlayer
+end)
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+	PlayerData.job = job
+end)
 
 Citizen.CreateThread(function()
 	for k, v in pairs(Config.location) do
 		if v.UsePed == true then
 			local hash = GetHashKey(v.ped)
-				lib.requestModel(hash,60)
+			if not HasModelLoaded(hash) then
+				RequestModel(hash)
+				Wait(10)
+			end
+			while not HasModelLoaded(hash) do 
+				Wait(10)
+			end
 	
 			pedspawned = true
 			evidenceNpc = CreatePed(5, hash, v.coords, v.h, false, false)
@@ -19,7 +45,6 @@ Citizen.CreateThread(function()
 			SetPedCanBeTargetted(evidenceNpc, false)
 			SetEntityInvincible(evidenceNpc, true)
 			FreezeEntityPosition(evidenceNpc, true)
-			SetBlockingOfNonTemporaryEvents(evidenceNpc, true)
 			lib.requestAnimDict("amb@world_human_cop_idles@male@idle_b", 100)
 		end
 	end
@@ -61,7 +86,7 @@ Citizen.CreateThread(function()
                     label = v.TargetLabel,
                     },
                 },
-				--job = {v.job},//idk what this should be but yea lol
+				job = {v.job},
                 distance = 2.5
             })  
 		end
@@ -116,12 +141,13 @@ lib.registerContext({
 
 RegisterNetEvent('SickEvidence:openInventory')
 AddEventHandler('SickEvidence:openInventory',function()
+	refreshjob()
 	for k,v in pairs(Config.location) do
-		if v.cop == true and v.job == playerState.job.name and playerState.job.grade >= v.AllowedRank then
+		if v.cop == true and v.job == PlayerData.job.name and PlayerData.job.grade >= v.AllowedRank then
 			lib.showContext('chiefmenu')
-		elseif v.cop == true and v.job == playerState.job.name then
+		elseif v.cop == true and v.job == PlayerData.job.name then
 			lib.showContext('openInventory')
-		elseif v.cop == false and v.job == playerState.job.name then
+		elseif v.cop == false and v.job == PlayerData.job.name then
 			lib.showContext('other_lockers')
 		end
 	end
@@ -636,10 +662,10 @@ RegisterNetEvent('SickEvidence:OtherlockerCallbackEvent')
 AddEventHandler('SickEvidence:OtherlockerCallbackEvent', function()
     ESX.TriggerServerCallback('SickEvidence:getPlayerName', function(data)
         if data ~= nil then
-			local OtherlockerID = (playerState.job.label.. ": " ..data.firstname.." "..data.lastname)
+			local OtherlockerID = (PlayerData.job.label.. ": " ..data.firstname.." "..data.lastname)
 			ESX.TriggerServerCallback('SickEvidence:getOtherInventories', function(Otherlocker)
 				if Otherlocker then
-					local OtherlockerID = (playerState.job.label.. ": " ..data.firstname.." "..data.lastname)
+					local OtherlockerID = (PlayerData.job.label.. ": " ..data.firstname.." "..data.lastname)
 					lib.registerContext({
 						id = 'Other_lockerOption',
 						title = 'Confirm or Cancel',
@@ -673,7 +699,7 @@ AddEventHandler('SickEvidence:OtherlockerCallbackEvent', function()
 				
 					lib.showContext('Other_lockerOption')
 				else
-					local OtherlockerID = (playerState.job.label.. ": " ..data.firstname.." "..data.lastname)
+					local OtherlockerID = (PlayerData.job.label.. ": " ..data.firstname.." "..data.lastname)
 					lib.registerContext({
 						id = 'Other_lockerCreate',
 						title = 'Confirm or Cancel',
@@ -718,3 +744,8 @@ AddEventHandler('SickEvidence:confirmorcancelOthers', function(args)
 	    ox_inventory:openInventory('Stash', OtherlockerID)
 	end
 end)
+
+function refreshjob()
+    Citizen.Wait(1)
+    PlayerData = ESX.GetPlayerData()
+end
