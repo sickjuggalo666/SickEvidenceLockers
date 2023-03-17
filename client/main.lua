@@ -271,7 +271,7 @@ AddEventHandler('SickEvidence:confirmLocker', function(args)
 	end
 end)
 
-local function lockerOption(lockerID)
+function lockerOption(lockerID)
 	lib.registerContext({
 		id = 'lockerOption',
 		title = 'Confirm or Cancel',
@@ -431,7 +431,7 @@ lib.registerContext({
 	},
 })
 
-local function ChooseOption()
+function ChooseOption()
 	lib.showContext('chooseOption')
 end
 
@@ -545,7 +545,7 @@ AddEventHandler('SickEvidence:ChiefLockerCheck',function(ID)
 	end, ID)
 end)
 
-local function ChieflockerOption(ID)
+function ChieflockerOption(ID)
 	lib.registerContext({
 		id = 'ChieflockerOption',
 		title = 'Confirm or Cancel',
@@ -596,7 +596,7 @@ AddEventHandler('SickEvidence:ChieflockerOptions', function(args)
 	end
 end)
 
-local function Notiy(noty_type, message)
+function Notiy(noty_type, message)
     if noty_type and message then
         if Config.NotificationType.client == 'esx' then
             ESX.ShowNotification(message)
@@ -745,7 +745,7 @@ AddEventHandler('SickEvidence:confirmorcancelOthers', function(args)
 	end
 end)
 
-local function refreshjob()
+function refreshjob()
     Citizen.Wait(1)
     PlayerData = ESX.GetPlayerData()
 end
