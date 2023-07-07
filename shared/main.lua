@@ -1,7 +1,7 @@
 Config = {}
 
 Config.ESXObject = 'esx:getSharedObject' -- this is only for events gets ignored if using export
-
+Config.Inv = 'ox' -- can be ox or qs
 Config.Target = 'ox_target'
 
 Config.location = {

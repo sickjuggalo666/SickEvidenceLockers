@@ -1,6 +1,6 @@
 ESX = nil
 local ox_inventory = exports.ox_inventory
-
+local qs_inventory = exports['qs-inventory']
 Discord_url = ""
 
 pcall(function() ESX = exports['es_extended']:getSharedObject() end)
@@ -16,8 +16,11 @@ AddEventHandler('SickEvidence:createInventory', function(evidenceID)
   local label = evidenceID  
   local slots = 25 
   local maxWeight = 5000 
-  
-  ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+  if Config.Inv == 'ox' then
+      ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+  elseif Config.Inv == 'qs' then
+      qs_inventory:RegisterStash(source, id, slots, maxWeight)
+  end
   sendCreateDiscord(source, name, "Created Evidence", evidenceID)
 end)
 
@@ -51,7 +54,11 @@ AddEventHandler('SickEvidence:createLocker', function(lockerID)
     local slots = 25 
     local maxWeight = 5000 
     
-    ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+    if Config.Inv == 'ox' then
+      ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+    elseif Config.Inv == 'qs' then
+      qs_inventory:RegisterStash(source, id, slots, maxWeight)
+    end
     sendCreateDiscord(source, name, "Created Locker",label)
 end)
 
@@ -73,7 +80,11 @@ AddEventHandler('SickEvidence:createOtherLocker', function(OtherlockerID)
     local slots = 25 
     local maxWeight = 5000 
     
-    ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+    if Config.Inv == 'ox' then
+      ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+    elseif Config.Inv == 'qs' then
+      qs_inventory:RegisterStash(source, id, slots, maxWeight)
+    end
     sendCreateDiscord(source, name, "Created Job Locker",label)
 end)
 

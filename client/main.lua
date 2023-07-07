@@ -162,8 +162,13 @@ AddEventHandler('SickEvidence:confirmorcancel', function(args)
 		local evidenceID = args.inventory
 		TriggerServerEvent("SickEvidence:createInventory", evidenceID)
 		Wait(1000)
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', evidenceID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', evidenceID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", evidenceID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", evidenceID)
+		end
 	end
 end)
 
@@ -253,8 +258,13 @@ AddEventHandler('SickEvidence:evidenceOptions', function(args)
 	elseif args.selection == "open" then
 		local evidenceID = args.inventory
 		Wait(1000)
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', evidenceID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', evidenceID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", evidenceID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", evidenceID)
+		end
 	end
 end)
 
@@ -266,8 +276,13 @@ AddEventHandler('SickEvidence:confirmLocker', function(args)
 		local lockerID = args.inventory
 		TriggerServerEvent("SickEvidence:createLocker", lockerID)
 		Wait(1000)
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', lockerID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', lockerID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", lockerID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", lockerID)
+		end
 	end
 end)
 
@@ -317,8 +332,13 @@ AddEventHandler('SickEvidence:lockerOptions', function(args)
 		Notiy("Deleted Locker!")
 	elseif args.selection == "open" then
 		local lockerID = args.inventory
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', lockerID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', lockerID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", lockerID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", lockerID)
+		end
 	end
 end)
 
@@ -591,8 +611,13 @@ AddEventHandler('SickEvidence:ChieflockerOptions', function(args)
 		Notiy("Deleted Locker!")
 	elseif args.selection == "open" then
 		local lockerID = args.inventory
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', lockerID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', lockerID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", lockerID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", lockerID)
+		end
 	end
 end)
 
@@ -653,8 +678,13 @@ AddEventHandler('SickEvidence:OtherlockerOptions', function(args)
 		Notiy("Deleted Locker!")
 	elseif args.selection == "open" then
 		local OtherlockerID = args.inventory
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', OtherlockerID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', OtherlockerID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", OtherlockerID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", OtherlockerID)
+		end
 	end
 end)
 
@@ -740,8 +770,13 @@ AddEventHandler('SickEvidence:confirmorcancelOthers', function(args)
 		local OtherlockerID = args.inventory
 		TriggerServerEvent("SickEvidence:createOtherLocker", OtherlockerID)
 		Wait(1000)
-		TriggerServerEvent('ox:loadStashes')
-	    ox_inventory:openInventory('Stash', OtherlockerID)
+		if Config.Inv == 'ox' then
+			TriggerServerEvent('ox:loadStashes')
+			ox_inventory:openInventory('Stash', OtherlockerID)
+		elseif Config.Inv == 'qs' then
+			--TriggerServerEvent("inventory:server:OpenInventory", "stash", evidenceID, other) --idk what one to use
+			TriggerEvent("inventory:client:SetCurrentStash", OtherlockerID)
+		end
 	end
 end)
 
