@@ -20,3 +20,9 @@ server_scripts {
 	'@oxmysql/lib/MySQL.lua',
 	'server/*.lua'
 }
+
+escrow_ignore {
+	'shared/*.lua',
+	'client/*.lua',
+	'server/*.lua'
+}
