@@ -626,13 +626,35 @@ function Notiy(noty_type, message)
         if Config.NotificationType.client == 'esx' then
             ESX.ShowNotification(message)
 
+        elseif Config.NotificationType.client == 'ox' then
+            if noty_type == 1 then
+				lib.notify({
+					title = 'Evidence',
+					description = message,
+					type = 'success'
+				})
+                exports['okokNotify']:Alert("Evidence", message, 10000, 'success')
+            elseif noty_type == 2 then
+				lib.notify({
+					title = 'Evidence',
+					description = message,
+					type = 'inform'
+				})
+            elseif noty_type == 3 then
+				lib.notify({
+					title = 'Evidence',
+					description = message,
+					type = 'error'
+				})
+            end
+
         elseif Config.NotificationType.client == 'okokNotify' then
             if noty_type == 1 then
-                exports['okokNotify']:Alert("Dongle", message, 10000, 'success')
+                exports['okokNotify']:Alert("Evidence", message, 10000, 'success')
             elseif noty_type == 2 then
-                exports['okokNotify']:Alert("Dongle", message, 10000, 'info')
+                exports['okokNotify']:Alert("Evidence", message, 10000, 'info')
             elseif noty_type == 3 then
-                exports['okokNotify']:Alert("Dongle", message, 10000, 'error')
+                exports['okokNotify']:Alert("Evidence", message, 10000, 'error')
             end
 
         elseif Config.NotificationType.client == 'mythic' then
