@@ -1,14 +1,12 @@
 Config = {}
-
-Config.ESXObject = 'esx:getSharedObject' -- this is only for events gets ignored if using export
-Config.Inv = 'ox' -- can be ox or qs
+Config.Framework = 'QBCore'
 Config.Target = 'ox_target'
 
 Config.location = {
     {
         UsePed = true, -- Do you want to use a ped?
-        coords = vector3(473.6921, -1005.8665, 25.2734), 
-        h = 162.1413, 
+        coords = vector3(98.7446, -961.8238, 28.4538), 
+        h = 246.6253, 
         size = vec3(3, 2, 3), -- size of the box zone
         rotation = 90, -- Rotation of box zone
         AllowedRank = 3, -- allowed ranks for Chief Options
@@ -19,8 +17,8 @@ Config.location = {
     },
     {
         UsePed = true,
-        coords = vector3(300.2429, -580.0558, 42.2609), 
-        h = 72.4052, 
+        coords = vector3(96.9536, -968.1559, 28.4064), 
+        h = 239.6446, 
         job = 'ambulance',
         AllowedRank = 3, 
         cop = false,
@@ -29,7 +27,6 @@ Config.location = {
     }
 }
 
-Config.NotificationType = { -- i forgot this on initial drop!
-    client = 'okokNotify',
-    server = 'okokNotify'
+Config.NotificationType = {
+    client = 'ox_libs'
 }

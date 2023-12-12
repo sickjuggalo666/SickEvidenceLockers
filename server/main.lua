@@ -1,106 +1,147 @@
-ESX = nil
+local Core = nil
+
 local ox_inventory = exports.ox_inventory
-local qs_inventory = exports['qs-inventory']
+
 Discord_url = ""
 
-pcall(function() ESX = exports['es_extended']:getSharedObject() end)
-if ESX == nil then
-    TriggerEvent(Config.ESXObject, function(obj) ESX = obj end)
+if Config.Framework == 'ESX' then
+  Core = exports['es_extended']:getSharedObject()
+elseif Config.Framework == 'QBCore' then
+  Core = exports['qb-core']:GetCoreObject()
 end
 
 RegisterNetEvent('SickEvidence:createInventory')
 AddEventHandler('SickEvidence:createInventory', function(evidenceID)
-  local xPlayer = ESX.GetPlayerFromId(source)
-  local name = xPlayer.getName()
-  local id = evidenceID
-  local label = evidenceID  
-  local slots = 25 
-  local maxWeight = 5000 
-  if Config.Inv == 'ox' then
+    if Config.Framework == 'ESX' then
+      local xPlayer = Core.GetPlayerFromId(source)
+      local name = xPlayer.getName()
+      local id = evidenceID
+      local label = evidenceID  
+      local slots = 25 
+      local maxWeight = 5000 
+      
+      ox_inventory:RegisterStash(id, label, slots, maxWeight)
+      sendCreateDiscord(source, name, "Created Evidence", evidenceID)
+    elseif Config.Framework == 'QBCore' then
+      local xPlayer = Core.Functions.GetPlayer(source)
+      local name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
+      local id = evidenceID
+      local label = evidenceID  
+      local slots = 25 
+      local maxWeight = 5000 
+      
       ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
-  elseif Config.Inv == 'qs' then
-      qs_inventory:RegisterStash(source, id, slots, maxWeight)
-  end
-  sendCreateDiscord(source, name, "Created Evidence", evidenceID)
+      sendCreateDiscord(source, name, "Created Evidence", evidenceID)
+    end
 end)
 
-ESX.RegisterServerCallback('SickEvidence:getInventory', function(source, cb, evidenceID)
+lib.callback.register('SickEvidence:getInventory', function(source, evidenceID)
     local inv = exports.ox_inventory:GetInventory(evidenceID, false)
     if inv then
-      cb(true)
+      return true
     else
-      cb(false)
+      return false
     end
 end)
 
 RegisterNetEvent('SickEvidence:deleteEvidence')
 AddEventHandler('SickEvidence:deleteEvidence', function(evidenceID)
-  --[[local xPlayer = ESX.GetPlayerFromId(source)
-  local name = xPlayer.getName()
-  MySQL.update('DELETE FROM `ox_inventory` WHERE identifier = ? ', {evidenceID}, function(affectedRows)
-      if affectedRows then
-          print(affectedRows)
-      end
-  end)
-  sendDeleteDiscord(source, name, "Deleted Evidence",evidenceID)]]
+    MySQL.update('DELETE FROM ox_inventory WHERE name = ?',
+      {
+        evidenceID
+      },function(result)
+        if result then
+          --Notify(1, src, "Warrant was deleted Successfully!")
+        else
+          --Notify(3, src, "Warrant wasn\'t Deleted please try again!")
+        end
+    end)
+    sendDeleteDiscord(source, name, "Deleted Evidence",evidenceID)
 end)
 
 RegisterNetEvent('SickEvidence:createLocker')
 AddEventHandler('SickEvidence:createLocker', function(lockerID)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local name = xPlayer.getName()
-    local id = lockerID
-    local label = lockerID  
-    local slots = 25 
-    local maxWeight = 5000 
-    
-    if Config.Inv == 'ox' then
-      ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
-    elseif Config.Inv == 'qs' then
-      qs_inventory:RegisterStash(source, id, slots, maxWeight)
+    if Config.Framework == 'ESX' then
+        local xPlayer = Core.GetPlayerFromId(source)
+        local name = xPlayer.getName()
+        local id = lockerID
+        local label = lockerID  
+        local slots = 25 
+        local maxWeight = 5000 
+        
+        ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+        sendCreateDiscord(source, name, "Created Locker",label)
+    elseif Config.Framework == 'QBCore' then
+        local xPlayer = Core.Functions.GetPlayer(source)
+        local name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
+        local id = lockerID
+        local label = lockerID  
+        local slots = 25 
+        local maxWeight = 5000 
+        
+        ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+        sendCreateDiscord(source, name, "Created Locker",label)
     end
-    sendCreateDiscord(source, name, "Created Locker",label)
 end)
 
-ESX.RegisterServerCallback('SickEvidence:getOtherInventories', function(source, cb, Otherlocker)
+lib.callback.register('SickEvidence:getOtherInventories', function(source, Otherlocker)
     local inv = exports.ox_inventory:GetInventory(Otherlocker, false)
     if inv then
-      cb(true)
+      return true
     else
-      cb(false)
+      return false
     end
 end)
 
 RegisterNetEvent('SickEvidence:createOtherLocker')
 AddEventHandler('SickEvidence:createOtherLocker', function(OtherlockerID)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local name = xPlayer.getName()
-    local id = OtherlockerID  
-    local label = OtherlockerID  
-    local slots = 25 
-    local maxWeight = 5000 
-    
-    if Config.Inv == 'ox' then
-      ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
-    elseif Config.Inv == 'qs' then
-      qs_inventory:RegisterStash(source, id, slots, maxWeight)
+    if Config.Framework == 'ESX' then
+        local xPlayer = Core.GetPlayerFromId(source)
+        local name = xPlayer.getName()
+        local id = OtherlockerID  
+        local label = OtherlockerID  
+        local slots = 25 
+        local maxWeight = 5000 
+        
+        ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+        sendCreateDiscord(source, name, "Created Job Locker",label)
+    elseif Config.Framework == 'QBCore' then
+        local xPlayer = Core.Functions.GetPlayer(source)
+        local name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
+        local id = OtherlockerID  
+        local label = OtherlockerID  
+        local slots = 25 
+        local maxWeight = 5000 
+        
+        ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
+        sendCreateDiscord(source, name, "Created Job Locker",label)
     end
-    sendCreateDiscord(source, name, "Created Job Locker",label)
 end)
 
 
-ESX.RegisterServerCallback('SickEvidence:getLocker', function(source, cb, lockerID)
+lib.callback.register('SickEvidence:getLocker', function(source, lockerID)
   local inv = exports.ox_inventory:GetInventory(lockerID, false)
   if not inv then
-    cb(true)
+    return true
   else
-    cb(false)
+    return false
   end
 end)
 
 RegisterNetEvent('SickEvidence:deleteLocker')
 AddEventHandler('SickEvidence:deleteLocker', function(lockerID)
-  print(string.format("deleting locker for identifier '%s'",lockerID))
+      MySQL.update('DELETE FROM ox_inventory WHERE name = ?',
+      {
+        lockerID
+      },function(result)
+        if result then
+          --Notify(1, src, "Warrant was deleted Successfully!")
+        else
+          --Notify(3, src, "Warrant wasn\'t Deleted please try again!")
+        end
+    end)
+    sendDeleteDiscord(source, name, "Deleted Locker",lockerID)
+    print(string.format("deleting locker for identifier '%s'",lockerID))
 end)
 
 sendDeleteDiscord = function(color, name, message, footer)
@@ -141,38 +182,44 @@ sendCreateDiscord = function(color, name, message, footer)
   PerformHttpRequest(Discord_url, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = embed}), { ['Content-Type'] = 'application/json' })
 end
 
-ESX.RegisterServerCallback('SickEvidence:getPlayerName', function(source,cb)
-  local xPlayer = ESX.GetPlayerFromId(source)
-  MySQL.Async.fetchAll('SELECT `firstname`,`lastname` FROM `users` WHERE `identifier` = @identifier',{
-      ['@identifier'] = xPlayer.identifier}, 
-    function(results)
-      if results[1] then
-        local data = {
-          firstname = results[1].firstname,
-          lastname  = results[1].lastname,
-        }
-        cb(data)
-      else
-        cb(nil)
-      end
-  end)
+lib.callback.register('SickEvidence:getPlayerName', function(source)
+    if Config.Framework == 'ESX' then
+      local xPlayer = Core.GetPlayerFromId(source)
+      MySQL.query('SELECT `firstname`,`lastname` FROM `users` WHERE `identifier` = @identifier',{
+          ['@identifier'] = xPlayer.identifier}, 
+        function(results)
+          if results[1] then
+            local data = {
+              firstname = results[1].firstname,
+              lastname  = results[1].lastname,
+            }
+            return data
+          else
+            return nil
+          end
+      end)
+    elseif Config.Framework == 'QBCore' then
+      local xPlayer = Core.Functions.GetPlayer(source)
+      local data = {
+        firstname = xPlayer.PlayerData.charinfo.firstname,
+        lastname  = xPlayer.PlayerData.charinfo.lastname,
+      }
+      print(json.encode(data,{indent=true}))
+      return data
+    end
 end)
 
 AddEventHandler('txAdmin:events:scheduledRestart', function(eventData)
   if eventData.secondsRemaining == 60 then
       CreateThread(function()
           Wait(45000)
-          --print("15 seconds before restart... saving all players!")
-          ESX.SavePlayers(function()
-              ExecuteCommand('saveinv')
-          end)
+          ExecuteCommand('saveinv')
       end)
   end
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
-  if (GetCurrentResourceName() ~= resourceName) then
+  if (GetCurrentResourceName() == resourceName) then
       ExecuteCommand('saveinv')
   end
-  --print('The resource ' .. resourceName .. ' was stopped.')
 end)

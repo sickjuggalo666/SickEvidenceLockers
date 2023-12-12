@@ -5,7 +5,7 @@ use MF_Inventory before but have made the move to OX_Inventory!
 **REQUIREMENTS**
 ~ Ox_libs
 ~ Ox_target
-~ ESX Legacy 1.9.2+
+~ ESX Legacy 1.9.2+ or QBCore (uses Exports)
 
 **MENU OPTIONS**
 ~ Chief can access any inventory that has been created so long as they 
@@ -22,7 +22,6 @@ based chief menus!
 **UTILIZATION**
 ~ Uses OX_libs for context and Dialog
 ~ Uses OX_Inventory for storage/lockers
-~ Uses StateBags for jobs/ranks! 
 ~ Webhooks for Creating and Deleting Inventories!
 
 
