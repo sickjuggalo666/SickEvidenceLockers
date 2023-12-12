@@ -4,7 +4,7 @@ game 'gta5'
 name "SickEvidence"
 description "A locker/evidence storage using ox_libs and inventory"
 author "SickJuggalo666"
-version "1.5.0"
+version "1.5.1"
 lua54 'yes'
 shared_scripts {
     '@ox_lib/init.lua',
