@@ -16,20 +16,20 @@ AddEventHandler('SickEvidence:createInventory', function(evidenceID)
       local xPlayer = Core.GetPlayerFromId(source)
       local name = xPlayer.getName()
       local id = evidenceID
-      local label = evidenceID  
-      local slots = 25 
-      local maxWeight = 5000 
-      
+      local label = evidenceID
+      local slots = 25
+      local maxWeight = 5000
+
       ox_inventory:RegisterStash(id, label, slots, maxWeight)
       sendCreateDiscord(source, name, "Created Evidence", evidenceID)
     elseif Config.Framework == 'QBCore' then
       local xPlayer = Core.Functions.GetPlayer(source)
       local name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
       local id = evidenceID
-      local label = evidenceID  
-      local slots = 25 
-      local maxWeight = 5000 
-      
+      local label = evidenceID
+      local slots = 25
+      local maxWeight = 5000
+
       ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
       sendCreateDiscord(source, name, "Created Evidence", evidenceID)
     end
@@ -65,20 +65,20 @@ AddEventHandler('SickEvidence:createLocker', function(lockerID)
         local xPlayer = Core.GetPlayerFromId(source)
         local name = xPlayer.getName()
         local id = lockerID
-        local label = lockerID  
-        local slots = 25 
-        local maxWeight = 5000 
-        
+        local label = lockerID
+        local slots = 25
+        local maxWeight = 5000
+
         ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
         sendCreateDiscord(source, name, "Created Locker",label)
     elseif Config.Framework == 'QBCore' then
         local xPlayer = Core.Functions.GetPlayer(source)
         local name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
         local id = lockerID
-        local label = lockerID  
-        local slots = 25 
-        local maxWeight = 5000 
-        
+        local label = lockerID
+        local slots = 25
+        local maxWeight = 5000
+
         ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
         sendCreateDiscord(source, name, "Created Locker",label)
     end
@@ -98,21 +98,21 @@ AddEventHandler('SickEvidence:createOtherLocker', function(OtherlockerID)
     if Config.Framework == 'ESX' then
         local xPlayer = Core.GetPlayerFromId(source)
         local name = xPlayer.getName()
-        local id = OtherlockerID  
-        local label = OtherlockerID  
-        local slots = 25 
-        local maxWeight = 5000 
-        
+        local id = OtherlockerID
+        local label = OtherlockerID
+        local slots = 25
+        local maxWeight = 5000
+
         ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
         sendCreateDiscord(source, name, "Created Job Locker",label)
     elseif Config.Framework == 'QBCore' then
         local xPlayer = Core.Functions.GetPlayer(source)
         local name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
-        local id = OtherlockerID  
-        local label = OtherlockerID  
-        local slots = 25 
-        local maxWeight = 5000 
-        
+        local id = OtherlockerID
+        local label = OtherlockerID
+        local slots = 25
+        local maxWeight = 5000
+
         ox_inventory:RegisterStash(id, label, slots, maxWeight,nil)
         sendCreateDiscord(source, name, "Created Job Locker",label)
     end
@@ -186,7 +186,7 @@ lib.callback.register('SickEvidence:getPlayerName', function(source)
     if Config.Framework == 'ESX' then
       local xPlayer = Core.GetPlayerFromId(source)
       MySQL.query('SELECT `firstname`,`lastname` FROM `users` WHERE `identifier` = @identifier',{
-          ['@identifier'] = xPlayer.identifier}, 
+          ['@identifier'] = xPlayer.identifier},
         function(results)
           if results[1] then
             local data = {

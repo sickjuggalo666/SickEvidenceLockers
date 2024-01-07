@@ -22,18 +22,21 @@ if Config.Framework == 'ESX' then
 	end)
 elseif Config.Framework == 'QBCore' then
 	RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-		PlayerData = Core.Function.GetPlayerData()
+		PlayerData = Core.Functions.GetPlayerData()
 	end)
-	
+
 	RegisterNetEvent('QBCore:Client:OnJobUpdate',function(JobInfo)
-		PlayerData = JobInfo
+		PlayerData.job = JobInfo
 	end)
 end
 
 
 local function refreshjob()
-    Citizen.Wait(1)
-    PlayerData = QBCore.Functions.GetPlayerData()
+	if Config.Framework == 'ESX' then
+		PlayerData = Core.GetPlayerData()
+	elseif Config.Framework == 'QBCore' then
+    	PlayerData = Core.Functions.GetPlayerData()
+	end
 end
 
 
@@ -45,19 +48,19 @@ local function Notiy(noty_type, message)
         elseif Config.NotificationType.client == 'ox_libs' then
 			if noty_type == 1 then
                 lib.notify({
-                    title = title,
+                    title = 'Lockers',
                     description = message,
                     type = 'success'
                 })
             elseif noty_type == 2 then
                 lib.notify({
-                    title = title,
+                    title = 'Lockers',
                     description = message,
                     type = 'inform'
                 })
             elseif noty_type == 3 then
                 lib.notify({
-                    title = title,
+                    title = 'Lockers',
                     description = message,
                     type = 'error'
                 })
@@ -74,10 +77,10 @@ local function Notiy(noty_type, message)
 
         elseif Config.NotificationType.client == 'chat' then
             TriggerEvent('chatMessage', message)
-            
+
         elseif Config.NotificationType.client == 'other' then
             --add your own notification.
-            
+
         end
     end
 end
@@ -91,10 +94,10 @@ Citizen.CreateThread(function()
 				RequestModel(hash)
 				Wait(10)
 			end
-			while not HasModelLoaded(hash) do 
+			while not HasModelLoaded(hash) do
 				Wait(10)
 			end
-	
+
 			pedspawned = true
 			evidenceNpc = CreatePed(5, hash, v.coords, v.h, false, false)
 			SetBlockingOfNonTemporaryEvents(evidenceNpc, true)
@@ -147,7 +150,7 @@ Citizen.CreateThread(function()
                 },
 				job = {v.job},
                 distance = 2.5
-            })  
+            })
 		end
 	end
 end)
@@ -241,9 +244,9 @@ RegisterNetEvent('SickEvidence:triggerEvidenceMenu')
 AddEventHandler('SickEvidence:triggerEvidenceMenu', function()
 	local input = lib.inputDialog('LSPD Evidence', {'Incident Number (#...)'})
 
-	if not input then 
+	if not input then
 		lib.hideContext(false)
-		return 
+		return
 	end
 	local evidenceID = ("Case :"..input[1])
 	local exists = lib.callback.await('SickEvidence:getInventory', 1000, evidenceID)
@@ -262,7 +265,7 @@ AddEventHandler('SickEvidence:triggerEvidenceMenu', function()
 					arrow = true,
 					event = 'SickEvidence:confirmorcancel',
 					args = {
-						selection = 'confirm', 
+						selection = 'confirm',
 						inventory = evidenceID
 					}
 				},
@@ -277,7 +280,7 @@ AddEventHandler('SickEvidence:triggerEvidenceMenu', function()
 				}
 			},
 		})
-	
+
 		lib.showContext('confirmCreate')
 	else
 		lib.registerContext({
@@ -355,7 +358,7 @@ local function lockerOption(lockerID)
 				arrow = true,
 				event = 'SickEvidence:lockerOptions',
 				args = {
-					selection = 'open', 
+					selection = 'open',
 					inventory = lockerID
 				},
 				metadata = {
@@ -399,7 +402,6 @@ AddEventHandler('SickEvidence:lockerCallbackEvent', function()
 		local locker = lib.callback.await('SickEvidence:getLocker', 1000, lockerID)
 		if locker then
 				local lockerID = ("LEO: "..data.firstname.." "..data.lastname)
-				print(lockerID)
 				lib.registerContext({
 					id = 'lockerCreate',
 					title = 'Confirm or Cancel',
@@ -425,7 +427,7 @@ AddEventHandler('SickEvidence:lockerCallbackEvent', function()
 						}
 					},
 				})
-			
+
 				lib.showContext('lockerCreate')
 			else
 				local lockerID = ("LEO: "..data.firstname.." "..data.lastname)
@@ -443,7 +445,7 @@ AddEventHandler('SickEvidence:lockerCallbackEvent', function()
 							arrow = true,
 							event = 'SickEvidence:lockerOptions',
 							args = {
-								selection = 'open', 
+								selection = 'open',
 								inventory = lockerID
 							},
 							metadata = {
@@ -462,7 +464,7 @@ AddEventHandler('SickEvidence:lockerCallbackEvent', function()
 						}
 					},
 				})
-			
+
 				lib.showContext('lockerOption')
 			end
 	else
@@ -508,9 +510,9 @@ RegisterNetEvent('SickEvidence:ChiefLookup')
 AddEventHandler('SickEvidence:ChiefLookup', function()
 	local input = lib.inputDialog('Police locker', {'First Name', 'Last Name'})
 
-	if not input then 
+	if not input then
 		lib.hideContext(false)
-		return 
+		return
 	end
 	local lockerID = ("LEO: "..input[1].. " "..input[2])
 	local exists = lib.callback.await('SickEvidence:getInventory', 1000, lockerID)
@@ -529,7 +531,7 @@ AddEventHandler('SickEvidence:ChiefLookup', function()
 					arrow = true,
 					event = 'SickEvidence:lockerOptions',
 					args = {
-						selection = 'open', 
+						selection = 'open',
 						inventory = lockerID
 					},
 					metadata = {
@@ -548,10 +550,10 @@ AddEventHandler('SickEvidence:ChiefLookup', function()
 				}
 			},
 		})
-	
+
 		lib.showContext('lockerOption')
 	else
-		Notiy(3,string.format('No Lockers with name: '..lockerID))	
+		Notiy(3,string.format('No Lockers with name: '..lockerID))
 	end
 end)
 
@@ -559,9 +561,9 @@ RegisterNetEvent('SickEvidence:ChiefCaseMenu')
 AddEventHandler('SickEvidence:ChiefCaseMenu', function()
 	local input = lib.inputDialog('LSPD Cases', {'Enter Case#'})
 
-	if not input then 
+	if not input then
 		lib.hideContext(false)
-		return 
+		return
 	end
 	local evidenceID = ("Case :#"..input[1])
 	local exists = lib.callback.await('SickEvidence:getInventory', 1000, evidenceID)
@@ -607,7 +609,7 @@ AddEventHandler('SickEvidence:ChiefLockerCheck', function(ID)
 	if exists then
 		lockerOption(ID)
 	else
-		Notiy(3,string.format('No Lockers with name: '..ID))	
+		Notiy(3,string.format('No Lockers with name: '..ID))
 	end
 end)
 
@@ -626,7 +628,7 @@ local function ChieflockerOption(ID)
 				arrow = true,
 				event = 'SickEvidence:lockerOptions',
 				args = {
-					selection = 'open', 
+					selection = 'open',
 					inventory = ID
 				},
 				metadata = {
@@ -711,7 +713,7 @@ AddEventHandler('SickEvidence:OtherlockerCallbackEvent', function()
 							arrow = true,
 							event = 'SickEvidence:OtherlockerOptions',
 							args = {
-								selection = 'open', 
+								selection = 'open',
 								inventory = OtherlockerID
 							}
 						},
@@ -722,12 +724,12 @@ AddEventHandler('SickEvidence:OtherlockerCallbackEvent', function()
 							event = 'SickEvidence:confirmorcancel',
 							args = {
 								selection = "delete",
-								inventory = lockerID
+								inventory = OtherlockerID
 							}
 						}
 					},
 				})
-			
+
 				lib.showContext('Other_lockerOption')
 			else
 				lib.registerContext({
@@ -754,7 +756,7 @@ AddEventHandler('SickEvidence:OtherlockerCallbackEvent', function()
 						}
 					},
 				})
-			
+
 				lib.showContext('Other_lockerCreate')
 			end
 	else

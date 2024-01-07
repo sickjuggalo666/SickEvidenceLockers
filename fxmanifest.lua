@@ -8,7 +8,7 @@ version "1.5.1"
 lua54 'yes'
 shared_scripts {
     '@ox_lib/init.lua',
-	--'@es_extended/locale.lua',
+	--'@es_extended/locale.lua', 
 	'shared/*.lua'
 }
 

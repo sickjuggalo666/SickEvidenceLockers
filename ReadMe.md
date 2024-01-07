@@ -31,4 +31,9 @@ please join the Discord with the link below! Discord also has other
 scripts I have made and will be adding more as we go on! Thank you all 
 again!
 
-**LINK:** https://discord.gg/YCsBGB58eg
+**Docs:**
+( https://docs.sickscripts.shop/)
+
+**DISCORD LINK**
+
+https://discord.gg/3EGcj8VTBb
