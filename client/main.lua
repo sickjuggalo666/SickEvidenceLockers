@@ -1,6 +1,6 @@
 local Core = nil
 local ox_inventory = exports.ox_inventory
-local pedspawned = false
+local pedSpawned = false
 local PlayerData = {}
 local evidenceNpc = nil
 
@@ -85,33 +85,6 @@ local function Notiy(noty_type, message)
     end
 end
 
-
-Citizen.CreateThread(function()
-	for k, v in pairs(Config.location) do
-		if v.UsePed == true then
-			local hash = GetHashKey(v.ped)
-			if not HasModelLoaded(hash) then
-				RequestModel(hash)
-				Wait(10)
-			end
-			while not HasModelLoaded(hash) do
-				Wait(10)
-			end
-
-			pedspawned = true
-			evidenceNpc = CreatePed(5, hash, v.coords, v.h, false, false)
-			SetBlockingOfNonTemporaryEvents(evidenceNpc, true)
-			SetPedDiesWhenInjured(evidenceNpc, false)
-			SetPedCanPlayAmbientAnims(evidenceNpc, true)
-			SetPedCanRagdollFromPlayerImpact(evidenceNpc, false)
-			SetPedCanBeTargetted(evidenceNpc, false)
-			SetEntityInvincible(evidenceNpc, true)
-			FreezeEntityPosition(evidenceNpc, true)
-			lib.requestAnimDict("amb@world_human_cop_idles@male@idle_b", 100)
-		end
-	end
-end)
-
 Citizen.CreateThread(function()
 	for k,v in pairs(Config.location) do
 		if Config.Target == 'ox_target' then
@@ -134,7 +107,7 @@ Citizen.CreateThread(function()
 				}
 			})
 		elseif Config.Target == 'qtarget' then
-			exports[Config.Target]:AddBoxZone('evidence_Lockers', vector3(v.coords.x,v.coords.y,v.coords.z), 3, 2, {
+			exports[Config.Target]:AddBoxZone('evidence_Lockers', vector3(v.coords.x,v.coords.y,v.coords.z+1.5), 3, 2, {
                 name='evidence_Lockers',
                 heading = v.h,
                 debugPoly=false,
@@ -151,6 +124,53 @@ Citizen.CreateThread(function()
 				job = {v.job},
                 distance = 2.5
             })
+		elseif Config.Target == 'qb-target' then
+			exports[Config.Target]:AddBoxZone("name", vector3(v.coords.x,v.coords.y,v.coords.z+1.5), 1.5, 1.6, {
+			name = "evidence_Lockers",
+			heading = v.h,
+			debugPoly = false,
+			minZ = 1.58,
+			maxZ = 4.56
+			}, {
+			options = {
+				{
+					type = "client",
+					event = 'SickEvidence:openInventory',
+					icon = 'fas fa-door-open',
+					label =  v.TargetLabel,
+					targeticon = 'fas fa-door-open',
+					canInteract = function()
+						return true
+					end,
+					job = {[v.job] = v.AllowedRank},
+					drawDistance = 5.0,
+					drawColor = {255, 255, 255, 255},
+					successDrawColor = {30, 144, 255, 255},
+				}
+			},
+				distance = 2.5,
+			})
+		end
+		if v.UsePed == true then
+			local hash = GetHashKey(v.ped)
+			if not HasModelLoaded(hash) then
+				RequestModel(hash)
+				Wait(10)
+			end
+			while not HasModelLoaded(hash) do
+				Wait(10)
+			end
+
+			pedSpawned = true
+			evidenceNpc = CreatePed(5, hash, v.coords, v.h, false, false)
+			SetBlockingOfNonTemporaryEvents(evidenceNpc, true)
+			SetPedDiesWhenInjured(evidenceNpc, false)
+			SetPedCanPlayAmbientAnims(evidenceNpc, true)
+			SetPedCanRagdollFromPlayerImpact(evidenceNpc, false)
+			SetPedCanBeTargetted(evidenceNpc, false)
+			SetEntityInvincible(evidenceNpc, true)
+			FreezeEntityPosition(evidenceNpc, true)
+			lib.requestAnimDict("amb@world_human_cop_idles@male@idle_b", 100)
 		end
 	end
 end)
@@ -502,10 +522,6 @@ lib.registerContext({
 	},
 })
 
-local function ChooseOption()
-	lib.showContext('chooseOption')
-end
-
 RegisterNetEvent('SickEvidence:ChiefLookup')
 AddEventHandler('SickEvidence:ChiefLookup', function()
 	local input = lib.inputDialog('Police locker', {'First Name', 'Last Name'})
@@ -603,17 +619,7 @@ AddEventHandler('SickEvidence:ChiefCaseMenu', function()
 	end
 end)
 
-RegisterNetEvent('SickEvidence:ChiefLockerCheck')
-AddEventHandler('SickEvidence:ChiefLockerCheck', function(ID)
-	local exists = lib.callback.await('SickEvidence:getLocker', 1000, ID)
-	if exists then
-		lockerOption(ID)
-	else
-		Notiy(3,string.format('No Lockers with name: '..ID))
-	end
-end)
-
-local function ChieflockerOption(ID)
+local function ChieflockerOption(ID) -- wait huh lol i guess i messed that up
 	lib.registerContext({
 		id = 'ChieflockerOption',
 		title = 'Confirm or Cancel',
@@ -650,6 +656,16 @@ local function ChieflockerOption(ID)
 
 	lib.showContext('ChieflockerOption')
 end
+
+RegisterNetEvent('SickEvidence:ChiefLockerCheck')
+AddEventHandler('SickEvidence:ChiefLockerCheck', function(ID)
+	local exists = lib.callback.await('SickEvidence:getLocker', 1000, ID)
+	if exists then
+		ChieflockerOption(ID)
+	else
+		Notiy(3,string.format('No Lockers with name: '..ID))
+	end
+end)
 
 RegisterNetEvent('SickEvidence:ChieflockerOptions')
 AddEventHandler('SickEvidence:ChieflockerOptions', function(args)
